@@ -69,6 +69,3 @@ def slack_redirect():
     else:
         print("Error:", response.json())
         return "It failed, check the logs for more info"
-if __name__ == "__main__":
-   app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0', port=5000)
-print("Server is running on https://localhost:5000")
