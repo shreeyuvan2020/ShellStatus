@@ -2,3 +2,4 @@ requests
 waitress
 bs4
 flask
+gunicorn
