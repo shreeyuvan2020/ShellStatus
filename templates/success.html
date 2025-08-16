@@ -1,0 +1,10 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha256-/ykJw/wDxMa0AQhHDYfuMEwVb4JHMx9h4jD4XvHqVzU=" crossorigin="anonymous" />
+    <button type="button" data-url="{{ url_for('set_status') }}" class="btn btn-danger" onclick="redirectToTarget(this)">Click this if you want to navigate back to the start page and stop updating your slack status with how many shells you have</button>
+    <script>
+        function redirectToTarget(button) {
+            const url = button.getAttribute('data-url');
+            window.location.href = url;
+        }
+    </script>
+</head>
