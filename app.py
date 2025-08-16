@@ -5,7 +5,7 @@ import os
 import json
 from flask import Flask, render_template, request, redirect, session
 url = "https://summer.hackclub.com/campfire"
-redirect_uri = "https://localhost:5000/slack_redirect"
+redirect_uri = "https://starchecker.tech"
 client_id = "2210535565.9204097075860"
 client_secret = os.getenv("ShellSecret")
 app = Flask(__name__)
@@ -63,9 +63,13 @@ def slack_redirect():
     print(response.text)
     if response.status_code == 200 and response.json().get('ok'):
         access_token = response.json().get('authed_user').get('access_token')
-        set_slack_status(access_token, {"_journey_session": session['cookie_value']})
+        session['access_token'] = access_token
         print(response.json())
-        return "Boom shakalaka, its succesful!!!!"
+        return redirect('/set_status')
     else:
         print("Error:", response.json())
         return "It failed, check the logs for more info"
+@app.route('/set_status')
+def set_status():
+    set_slack_status(session['access_token'], {"_journey_session": session['cookie_value']})
+    return render_template('success.html')
