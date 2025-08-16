@@ -5,7 +5,7 @@ import os
 import json
 from flask import Flask, render_template, request, redirect, session
 url = "https://summer.hackclub.com/campfire"
-redirect_uri = "https://starchecker.tech"
+redirect_uri = "https://starchecker.tech/slack_redirect"
 client_id = "2210535565.9204097075860"
 client_secret = os.getenv("ShellSecret")
 app = Flask(__name__)
