@@ -43,7 +43,7 @@ def login():
     print(f"State: {state}")
     session['state'] = state # putting it into the flask session so i can access it later
     scopes = "users.profile:write" # need this scope to set status
-    auth_url = f"https://slack.com/oauth/v2/authorize?"f"client_id={client_id}&user_scope={scopes}&state={state}&redirect_uri={redirect_uri}"
+    auth_url = f"https://slack.com/oauth/v2/authorize?"f"client_id={client_id}&client_secret={client_secret}&user_scope={scopes}&state={state}&redirect_uri={redirect_uri}"
     return redirect(auth_url)
 @app.route('/slack_redirect') # redirects me to slack wow nobody knew that for sure right
 def slack_redirect():
