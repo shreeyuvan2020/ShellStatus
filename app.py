@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 import secrets
 import os
 import json
-from flask import Flask, render_template, request, redirect, session
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, render_template, request, redirect, session, jsonify
 url = "https://summer.hackclub.com/campfire"
 redirect_uri = "https://starchecker.tech/slack_redirect"
 client_id = "2210535565.9204097075860"
@@ -16,9 +17,19 @@ def set_slack_status(access_token, cookies):
     soup = BeautifulSoup(response.text, 'html.parser')
     print(soup.prettify())
     shell_count = soup.find("span", class_="ml-1")
+    shell_count = shell_count.text.strip()
     print(shell_count.text.strip())
+    if int(shell_count) <= 100:
+        emoji=":blob_help:"
+        status_text=shell_count + "(not) baller"
+    elif int(shell_count) > 100 and int(shell_count) <= 300:
+        emoji=":blob_hype:"
+        status_text=shell_count + "baller"
+    elif int(shell_count) > 300:
+        emoji=":muga:"
+        status_text = shell_count + "baller"
     headers = {"Content-type": "application/json; charset=utf-8", "Authorization": f"Bearer {access_token}"}
-    payload = {"profile": {"status_text": shell_count.text.strip() + " shells", "status_emoji": ":shells:", "status_expiration": 0}}
+    payload = {"profile": {"status_text": status_text, "status_emoji": emoji, "status_expiration": 0}}
     response = requests.post("https://slack.com/api/users.profile.set", headers=headers, data=json.dumps(payload))
     response.raise_for_status()
     print("Status Code:", response.status_code)
@@ -66,6 +77,24 @@ def slack_redirect():
     else:
         print("Error:", response.json())
         return "It failed, check the logs for more info"
+@app.route('/toggle_status', methods=['POST'])
+def toggle_status():
+    global status_update_job
+    if status_update_job is None:
+        status_update_job = scheduler.add_job(
+            func=lambda: set_slack_status(session['access_token'], {"_journey_session": session['cookie_value']}),
+            trigger="interval",
+            seconds=3600 
+        )
+        scheduler.start()
+        print("Status updates started.")
+        return jsonify({"status_update_active": True})
+    else:
+        status_update_job.remove()
+        status_update_job = None
+        print("Status updates stopped.")
+        return jsonify({"status_update_active": False})
+
 @app.route('/set_status')
 def set_status():
     set_slack_status(session['access_token'], {"_journey_session": session['cookie_value']})
