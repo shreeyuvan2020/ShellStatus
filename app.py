@@ -17,9 +17,6 @@ def set_slack_status(access_token, cookies):
     print(soup.prettify())
     shell_count = soup.find("span", class_="ml-1")
     print(shell_count.text.strip())
-    with open("token.txt", "r") as f:
-        access_token = f.read().strip()
-        print(f"Access Token: {access_token}")
     headers = {"Content-type": "application/json; charset=utf-8", "Authorization": f"Bearer {access_token}"}
     payload = {"profile": {"status_text": shell_count.text.strip() + " shells", "status_emoji": ":shells:", "status_expiration": 0}}
     response = requests.post("https://slack.com/api/users.profile.set", headers=headers, data=json.dumps(payload))
