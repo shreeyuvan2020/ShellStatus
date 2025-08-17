@@ -1,10 +1,20 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha256-/ykJw/wDxMa0AQhHDYfuMEwVb4JHMx9h4jD4XvHqVzU=" crossorigin="anonymous" />
-    <button type="button" data-url="{{ url_for('set_status') }}" class="btn btn-danger" onclick="redirectToTarget(this)">Click this if you want to navigate back to the start page and stop updating your slack status with how many shells you have</button>
+    <button type="button" id="toggleButton" class="btn btn-danger" onclick="toggleStatus()">Start Updates</button>
     <script>
-        function redirectToTarget(button) {
-            const url = button.getAttribute('data-url');
-            window.location.href = url;
+        async function toggleStatus() {
+            const response = await fetch('/toggle_status', { method: 'POST' });
+            const data = await response.json();
+            const button = document.getElementById('toggleButton');
+            if (data.status_update_active) {
+                button.textContent = 'Stop Updates';
+                button.classList.remove('btn-danger');
+                button.classList.add('btn-success');
+            } else {
+                button.textContent = 'Start Updates';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-danger');
+            }
         }
     </script>
 </head>
