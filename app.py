@@ -18,7 +18,6 @@ def set_slack_status(access_token, cookies):
     print(soup.prettify())
     shell_count = soup.find("span", class_="ml-1")
     shell_count = shell_count.text.strip()
-    print(shell_count.text.strip())
     if int(shell_count) <= 100:
         emoji=":blob_help:"
         status_text=shell_count + "(not) baller"
