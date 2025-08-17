@@ -78,6 +78,8 @@ def slack_redirect():
         return "It failed, check the logs for more info"
 @app.route('/toggle_status', methods=['POST'])
 def toggle_status():
+    scheduler = BackgroundScheduler()
+    status_update_job = None
     global status_update_job
     if status_update_job is None:
         status_update_job = scheduler.add_job(
