@@ -20,13 +20,13 @@ def set_slack_status(access_token, cookies):
     shell_count = shell_count.text.strip()
     if int(shell_count) <= 100:
         emoji=":blob_help:"
-        status_text=shell_count + "(not) baller"
+        status_text=shell_count + " shell (not) baller"
     elif int(shell_count) > 100 and int(shell_count) <= 300:
         emoji=":blob_hype:"
-        status_text=shell_count + "baller"
+        status_text=shell_count + " shell baller"
     elif int(shell_count) > 300:
         emoji=":muga:"
-        status_text = shell_count + "baller"
+        status_text = shell_count + " shell baller"
     headers = {"Content-type": "application/json; charset=utf-8", "Authorization": f"Bearer {access_token}"}
     payload = {"profile": {"status_text": status_text, "status_emoji": emoji, "status_expiration": 0}}
     response = requests.post("https://slack.com/api/users.profile.set", headers=headers, data=json.dumps(payload))
