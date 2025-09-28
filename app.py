@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import secrets
+import logging
 import os
 import json
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -10,6 +11,7 @@ redirect_uri = "https://starchecker.tech/slack_redirect"
 client_id = "2210535565.9204097075860"
 client_secret = os.getenv("ShellSecret")
 app = Flask(__name__)
+app.logger.setLevel(logging.DEBUG)
 app.secret_key = secrets.token_hex(16)
 def set_slack_status(access_token, cookies):
     url = "https://summer.hackclub.com/campfire"
@@ -35,6 +37,7 @@ def set_slack_status(access_token, cookies):
     print("Response Body:", response.json())
 @app.route('/', methods=["GET"])
 def index():
+    app.logger.debug("Got through initial index")
     return render_template('index.html')
 @app.route('/set_cookie', methods=['POST'])
 def set_cookie():
@@ -75,6 +78,7 @@ def slack_redirect():
         return redirect('/set_status')
     else:
         print("Error:", response.json())
+        app.logger.error(response.json())
         return "It failed, check the logs for more info"
 scheduler = BackgroundScheduler()
 status_update_job = None
