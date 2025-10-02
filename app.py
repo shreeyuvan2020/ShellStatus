@@ -78,7 +78,7 @@ def slack_redirect():
         return redirect('/set_status')
     else:
         print("Error:", response.json())
-        app.logger.error(response.json())
+        app.logger.error(client_secret)
         return "It failed, check the logs for more info"
 scheduler = BackgroundScheduler()
 status_update_job = None
