@@ -9,6 +9,4 @@ source Shells/bin/activate
 export
 pip install -r requirements.txt
 
-gunicorn -b ":$PORT" app:app
-
---log-syslog
+gunicorn -b ":$PORT" app:app --log-level debug --log-syslog
