@@ -10,3 +10,5 @@ export
 pip install -r requirements.txt
 
 gunicorn -b ":$PORT" app:app
+
+--log-syslog
