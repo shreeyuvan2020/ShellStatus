@@ -85,7 +85,7 @@ status_update_job = None
 @app.route('/toggle_status', methods=['POST'])
 def toggle_status():
     global status_update_job
-    if status_update_job is None:
+    if status_update_job.running:
         status_update_job = scheduler.add_job(
             func=lambda: set_slack_status(session['access_token'], {"_journey_session": session['cookie_value']}),
             trigger="interval",
