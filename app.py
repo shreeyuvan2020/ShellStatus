@@ -9,6 +9,7 @@ from flask import Flask, render_template, request, redirect, session, jsonify
 url = "https://summer.hackclub.com/campfire"
 redirect_uri = "https://starchecker.tech/slack_redirect"
 client_id = "2210535565.9204097075860"
+global client_secret
 client_secret = os.getenv("ShellSecret")
 app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
@@ -41,6 +42,7 @@ def index():
     return render_template('index.html')
 @app.route('/set_cookie', methods=['POST'])
 def set_cookie():
+    global cookie_value
     cookie_value = request.form.get('cookie_value')
     if not cookie_value:
         return "No cookie value provided", 400
