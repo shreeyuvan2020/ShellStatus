@@ -87,6 +87,8 @@ def toggle_status():
     global status_update_job
     if status_update_job is None:
         if not status_update_job.running:
+            app.logger.debug("Not tuff")
+        else:
             status_update_job = scheduler.add_job(
                 func=lambda: set_slack_status(session['access_token'], {"_journey_session": session['cookie_value']}),
                 trigger="interval",
@@ -95,8 +97,6 @@ def toggle_status():
             scheduler.start()
             print("Status updates started.")
             return jsonify({"status_update_active": True})
-        else:
-            app.logger.debug("Not tuff")
     else:
         status_update_job.remove()
         status_update_job = None
